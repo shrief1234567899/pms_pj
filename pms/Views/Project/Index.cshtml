@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "Projects";
+}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#all">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#pending">Pending</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#delivered">Delivered</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#not_delivered">Not Delivered</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="all" class="tab-pane active">
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card border-primary shadow mb-3 list-project-card pj1">
+                        <div class="card-header text-white bg-primary">
+                            PJ #1
+                            <span class="badge badge-dark float-right">pending</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img class="img-thumbnail" src="~/images/pj_logo.png" alt="logo" width="100" height="100">
+                                </div>
+                                <div class="col-md-9">
+                                    <h5 class="card-title list-pj-name pj1">Pic W Post</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted list-pj-desc pj1">PicWPost is a start up on the rise that is poised to change the world of accounting experience.</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="text-muted">last updated 3 time ago</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="#"><i class="fas fa-trash-alt float-right text-danger delete-pj-icon" id="pj1"></i></a>
+                                    <a href="#"><i class="fas fa-edit float-right text-primary mr-3 edit-pj-icon" id="pj1"></i></a>
+                                    <a href="#"><i class="fas fa-eye float-right text-warning mr-3 view-project" id="pj1" status="primary"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-success shadow mb-3 list-project-card pj2">
+                        <div class="card-header text-white bg-success">
+                            PJ #2
+                            <span class="badge badge-dark float-right">delivered</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img class="img-thumbnail" src="~/images/pj_logo.png" alt="logo" width="100" height="100">
+                                </div>
+                                <div class="col-md-9">
+                                    <h5 class="card-title">Pic W Post</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">PicWPost is a start up on the rise that is poised to change the world of accounting experience.</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="text-muted">last updated 3 time ago</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="#"><i class="fas fa-trash-alt float-right text-danger delete-pj-icon" id="pj2"></i></a>
+                                    <a href="#"><i class="fas fa-edit float-right text-primary mr-3 edit-pj-icon" id="pj2"></i></a>
+                                    <a href="#"><i class="fas fa-eye float-right text-warning mr-3 view-project" id="pj2" status="success"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-danger shadow mb-3 list-project-card pj3">
+                        <div class="card-header text-white bg-danger">
+                            PJ #3
+                            <span class="badge badge-dark float-right">not delivered</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img class="img-thumbnail" src="~/images/pj_logo.png" alt="logo" width="100" height="100">
+                                </div>
+                                <div class="col-md-9">
+                                    <h5 class="card-title">Pic W Post</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">PicWPost is a start up on the rise that is poised to change the world of accounting experience.</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="text-muted">last updated 3 time ago</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="#"><i class="fas fa-trash-alt float-right text-danger delete-pj-icon" id="pj3"></i></a>
+                                    <a href="#"><i class="fas fa-edit float-right text-primary mr-3 edit-pj-icon" id="pj3"></i></a>
+                                    <a href="#"><i class="fas fa-eye float-right text-warning mr-3 view-project" id="pj3" status="danger"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-5">
+                    @{Html.RenderPartial("~/Views/Project/Show.cshtml");}
+                    @{Html.RenderPartial("~/Views/Project/Edit.cshtml");}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pending" class="tab-pane fade">
+    </div>
+    <div id="delivered" class="tab-pane fade">
+    </div>
+    <div id="not_delivered" class="tab-pane fade">
+    </div>
+</div>
+
+@section scripts{
+    <script>
+    $('.edit-project').hide();
+
+    $('.view-project').on("click" , function(event){
+      AjaxRequest('GET' , '/Project/GetProject');
+
+      $('.edit-project').hide();
+      var projectId = $(this).attr('id');
+      var status = $(this).attr('status');
+      var viewProjectCardHeader = $('.view-project-header');
+      var viewProjectCard = $('.view-project-card');
+      var viewProjectCardFooter = $('.view-project-footer');
+
+      viewProjectCardHeader.removeClass();
+      viewProjectCardHeader.addClass('card-header text-white view-project-header bg-' + status);
+
+      viewProjectCardFooter.removeClass();
+      viewProjectCardFooter.addClass('card-footer view-project-footer bg-' + status);
+
+      viewProjectCard.removeClass()
+      viewProjectCard.addClass('card mb-3 shadow view-project-card border-' + status);
+
+      $('.view-project-name').text('name');
+      $('.view-project-description').text('desc');
+      $('.view-project-experience').text('exp');
+      $('.view-project-details').text('google.com');
+      $('.view-project-details').attr("href", 'https://www.google.com/');
+      $('.view-project-manager').html(`
+                  manager name
+                  <span class="badge badge-dark float-right">Assigned from test date</span>`);
+
+      viewProjectCard.hide();
+      viewProjectCard.fadeToggle();
+    })
+
+    $('.edit-pj-icon').on("click" , function(event){
+      var projectId = $(this).attr('id');
+
+      $('.view-project-card').hide();
+
+      $('.edit-project').hide();
+      $('.edit-project').fadeToggle();
+
+      $('.edit-project-name').val('name');
+      $('.edit-project-description').val('description');
+      $('.edit-project-experience').val('5');
+    })
+
+    $('.delete-pj-icon').on("click" , function(event){
+        var projectId = $(this).attr('id');
+
+        $('.list-project-card.' + projectId).slideUp();
+    })
+
+    function AjaxRequest(method , url , data = null) {
+        $.ajax({
+            type: method,
+            url: '@Url.Action("GetProject", "Project")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: OnSuccessCall,
+            error: OnErrorCall
+        });
+    }
+
+    function OnSuccessCall(response) {
+      /*response (status , data , displaySweetAlert , message)*/
+      if(response.displaySweetAlert){
+        swal("Good job!", response.message , "success")
+      }
+    }
+
+    function OnErrorCall(response) {
+      /*response (status , data , displaySweetAlert , message)*/
+      if(response.displaySweetAlert){
+        swal("Error Occured!", response.message , "error")
+      }
+    }
+    </script>
+}
