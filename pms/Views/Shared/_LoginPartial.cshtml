@@ -1,0 +1,25 @@
+﻿
+@using pms.Models
+@if (Session["LoggedUser"] != null)
+{
+    User loggedIn = (User)Session["LoggedUser"];
+   
+    using (Html.BeginForm("LogOut", "User", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li class="pr-3">
+            @Html.ActionLink("Hello "+ loggedIn.first_name + " " + loggedIn.last_name +"!", "Index", "Home" , new { @class = "font-weight-bold text-white nav-link" })
+        </li>
+        <li><a class="font-weight-bold text-white nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log Out</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li class="pr-3">@Html.ActionLink("Register", "Registration", "User" , new { @class = "font-weight-bold text-white nav-link" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "User" , new { @class = "font-weight-bold text-white nav-link" })</li>
+    </ul>
+}

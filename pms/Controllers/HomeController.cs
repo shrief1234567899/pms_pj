@@ -10,6 +10,31 @@ namespace pms.Controllers
     {
         public ActionResult Index()
         {
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            // using (PMEntities context = new PMEntities())
+            ///{
+            /* User user = new User()
+             {
+                 first_name = "TMT",
+                 last_name = "MEDHAT" ,
+                 jop_description = "CEO OF TMT",
+                 type = "Admin"
+
+             };
+             context.Users.Add(user);
+             context.SaveChanges(); */
+
+            // select data
+            //User user = context.Users.FirstOrDefault(u => u.first_name == "TMT");
+            // update
+            //user.password = "123456";
+            //remove
+            //context.Users.Remove(user);
+            //context.SaveChanges();
+            //}
             return View();
         }
 
