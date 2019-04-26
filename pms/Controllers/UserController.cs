@@ -11,12 +11,20 @@ namespace pms.Controllers
     {
         public ActionResult CustomerHome()
         {
-            return View("~/Views/Customer/Index.cshtml");
+            var loggedUser = (User)Session["LoggedUser"];
+            if (loggedUser != null)
+                return View("~/Views/Customer/Index.cshtml");
+            else
+                return RedirectToAction("Login", "User");
         }
 
         public ActionResult Profile()
         {
-            return View("~/Views/User/Profile.cshtml");
+            var loggedUser = (User)Session["LoggedUser"];
+            if (loggedUser != null)
+                return View("~/Views/User/Profile.cshtml");
+            else
+                return RedirectToAction("Login", "User");
         }
 
         [HttpGet]
@@ -127,13 +135,14 @@ namespace pms.Controllers
         [HttpPost]
         public ActionResult EditProfile(User newdata)
         {
+            var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
                 if (context.Users.Any(u => u.Id == newdata.Id))
                 {
                     try
                     {
-                        User editeduser = context.Users.Find(newdata.Id);
+                        User editeduser = context.Users.Find(loggedUser.Id);
                         editeduser.first_name = newdata.first_name;
                         editeduser.last_name = newdata.last_name;
                         editeduser.email = newdata.email;
@@ -157,11 +166,12 @@ namespace pms.Controllers
         [HttpGet]
         public ActionResult GetUserProfile(int id)
         {
+            var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
                 if (context.Users.Any(u => u.Id == id))
                 {
-                    User userprofile = context.Users.Find(id);
+                    User userprofile = context.Users.Find(loggedUser.Id);
                     double pendingCount = context.projects.Count(p => p.status == 0);
                     double deliveredCount = context.projects.Count(p => p.status == 1);
                     double notdeliveredCount = context.projects.Count(p => p.status == 2);

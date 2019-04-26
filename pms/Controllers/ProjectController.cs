@@ -11,25 +11,30 @@ namespace pms.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var loggedUser = (User)Session["LoggedUser"];
+            if(loggedUser!=null)
+                return View();
+            else
+                return RedirectToAction("Login", "User");
         }
 
         [HttpGet]
         public ActionResult GetProjectByStatus(int Id)
         {
+            var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
-                if (context.projects.Any(p => p.status == Id))
+                if (context.projects.Any(p => (p.status == Id && p.owner_id == loggedUser.Id)))
                 {
-                    var projectsData = context.projects.Where(p => p.status == Id).ToList();
+                    var projectsData = context.projects.Where(p => (p.status == Id && p.owner_id == loggedUser.Id)).ToList();
                     return Json(new { status = "200", data = projectsData, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
                 else if (Id == -1)
                 {
-                    var projectsData = context.projects.ToList();
+                    var projectsData = context.projects.Where(p => (p.owner_id == loggedUser.Id)).ToList();
 
                     if (projectsData.Count == 0)
-                        return Json(new { status = "404", data = "", message = "No Project Found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = "404", data = "", message = "No Project Found", displaySweetAlert = false}, JsonRequestBehavior.AllowGet);
 
                     return Json(new { status = "200", data = projectsData, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
@@ -80,6 +85,7 @@ namespace pms.Controllers
         [HttpPost]
         public ActionResult AddProject(project newproject)
         {
+            var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
                 int maxPj = context.projects.Count();
@@ -93,7 +99,8 @@ namespace pms.Controllers
                     Id = maxPj + 1,
                     name = newproject.name,
                     status = 0,
-                    description = newproject.description
+                    description = newproject.description,
+                    owner_id = loggedUser.Id
                 };
                 context.projects.Add(pj);
                 context.SaveChanges();
