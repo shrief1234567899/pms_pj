@@ -7,143 +7,26 @@
     <div class="row">
         <div class="col-md-5">
             @{Html.RenderPartial("~/Views/Project/Add.cshtml");}
+            <div class="text-center"><i class="fas fa-4x fa-spinner fa-spin text-dark"></i></div>
         </div>
         <div class="col-md-7 projects">
-            <div class="card shadow mb-3">
-                <div class="card-header">PJ #1</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img class="img-thumbnail" src="images/pj_logo.png" alt="logo" width="100" height="100">
-                        </div>
-                        <div class="col-md-9">
-                            <h5 class="card-title">Pic W Post</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">PicWPost is a start up on the rise that is poised to change the world of accounting experience.</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <small class="text-muted">last updated 3 time ago</small>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="accordion" id="pjManagerAccordion">
-                                <button class="btn btn-link float-right" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                                    Requests
-                                    <span class="badge badge-primary">2</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="collapse1" class="collapse hidden" aria-labelledby="headingOne" data-parent="#pjManagerAccordion">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            Ahmed aly
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                        <li class="list-group-item">
-                            Mohamed fouad
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card shadow mb-3">
-                <div class="card-header">PJ #1</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img class="img-thumbnail" src="images/pj_logo.png" alt="logo" width="100" height="100">
-                        </div>
-                        <div class="col-md-9">
-                            <h5 class="card-title">Pic W Post</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">PicWPost is a start up on the rise that is poised to change the world of accounting experience.</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <small class="text-muted">last updated 3 time ago</small>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="accordion" id="pjManagerAccordion">
-                                <button class="btn btn-link float-right" type="button" data-toggle="collapse" data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
-                                    Requests
-                                    <span class="badge badge-primary">2</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="collapse2" class="collapse hidden" aria-labelledby="headingOne" data-parent="#pjManagerAccordion">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            Ahmed aly
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                        <li class="list-group-item">
-                            Mohamed fouad
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card shadow mb-3">
-                <div class="card-header">PJ #1</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img class="img-thumbnail" src="images/pj_logo.png" alt="logo" width="100" height="100">
-                        </div>
-                        <div class="col-md-9">
-                            <h5 class="card-title">Pic W Post</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">PicWPost is a start up on the rise that is poised to change the world of accounting experience.</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <small class="text-muted">last updated 3 time ago</small>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="accordion" id="pjManagerAccordion">
-                                <button class="btn btn-link float-right" type="button" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
-                                    Requests
-                                    <span class="badge badge-primary">2</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="collapse3" class="collapse hidden" aria-labelledby="headingOne" data-parent="#pjManagerAccordion">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            Ahmed aly
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                        <li class="list-group-item">
-                            Mohamed fouad
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
 @section scripts{
     <script>
-    $('#add_project').on("submit" , function(event){
-        event.preventDefault();
+    $('.fa-spinner').hide();
+    AjaxRequest('GET' , 'GetProjectByStatus' , 'Project' , 0 , displayPendingProjects , $('.projects'));
+
+    $('#add_project').submit(function(){
+        $('.fa-spinner').show();
+        var urlAction = '@Url.Action("AddProject", "Project")';
+
+        $.post(urlAction, $('#add_project').serialize(), function (data) {
+        OnSuccessCall(data, null, null);
         $('.projects').prepend(`
-            <div class="card shadow mb-3" id="4">
+            <div class="card shadow mb-3" id="`+data.data.Id+`">
                 <div class="card-header">new project</div>
                 <div class="card-body">
                     <div class="row">
@@ -151,22 +34,144 @@
                             <img class="img-thumbnail" src="/images/pj_logo.png" alt="logo" width="100" height="100">
                         </div>
                         <div class="col-md-9">
-                            <h5 class="card-title">Pic W Post</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">PicWPost is a start up on the rise that is poised to change the world of accounting experience.</h6>
+                            <h5 class="card-title">`+ data.data.name + `</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">`+ data.data.description +`</h6>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-md-6">
-                            <small class="text-muted">last updated 3 time ago</small>
+                            <small class="text-muted">1</small><small class="text-muted"> year or plus</small>
                         </div>
                     </div>
                 </div>
             </div>
             `);
-        $('#4').hide();
-        $('#4').slideToggle();
-    })
+        $('#'+data.data.Id).hide();
+        $('#'+data.data.Id).slideToggle();
+        });
+        return false;
+    });
+
+    function AjaxRequest(method, action, controller, data = null, handledata = null, viewobj = null) {
+        $('.fa-spinner').show();
+
+        var urlAction = '@Url.Action("action", "controller", new { id = "idvalue" })';
+        urlAction = urlAction.replace("action", action);
+        urlAction = urlAction.replace("controller", controller);
+        urlAction = urlAction.replace("idvalue", data);
+
+        $.ajax({
+            type: method,
+            url: urlAction,
+            contentType: "application/json; charset=utf-8",
+            data:data,
+            dataType: "json",
+            success: function (data){
+                OnSuccessCall(data , handledata , viewobj);
+            },
+            error: OnErrorCall
+        });
+    }
+
+    function OnSuccessCall(response , handledata , viewobj) {
+        /*response (status , data , displaySweetAlert , message)*/
+        if (handledata) {
+            handledata(response.data , viewobj)
+        }
+        if (response.displaySweetAlert){
+            swal("Good job!", response.message , "success")
+        }
+        if (response.status != "200") {
+            swal("Error Occured!", response.message , "error")
+        }
+        $('.fa-spinner').hide();
+    }
+
+    function OnErrorCall(response) {
+      /*response (status , data , displaySweetAlert , message)*/
+      if(response.displaySweetAlert){
+        swal("Error Occured!", response.message , "error")
+        }
+      $('.fa-spinner').hide();
+    }
+
+    function ViewProject(data , viewobj) {
+        if (data) {
+           $('.edit-project').hide();
+          var status = $(viewobj).attr('status');
+          var viewProjectCardHeader = $('.view-project-header');
+          var viewProjectCard = $('.view-project-card');
+          var viewProjectCardFooter = $('.view-project-footer');
+          viewProjectCardHeader.removeClass();
+          viewProjectCardHeader.addClass('card-header text-white view-project-header bg-' + status);
+          viewProjectCardFooter.removeClass();
+          viewProjectCardFooter.addClass('card-footer view-project-footer bg-' + status);
+          viewProjectCard.removeClass()
+          viewProjectCard.addClass('card mb-3 shadow view-project-card border-' + status);
+          $('.view-project-name').text(data.name);
+          $('.view-project-description').text(data.description);
+          $('.view-project-experience').text('exp');
+          $('.view-project-details').text('google.com');
+          $('.view-project-details').attr("href", 'https://www.google.com/');
+          $('.view-project-manager').html(`
+                      manager name
+                      <span class="badge badge-dark float-right">Assigned from test date</span>`);
+          viewProjectCard.hide();
+          viewProjectCard.fadeToggle();
+        }
+    }
+
+    function displayPendingProjects(data, viewobj)
+    {
+        viewobj.html('');//clear all data displayed if any
+        $.each(data, function (key , pj) {
+            viewobj.prepend(`
+              <div class="card shadow mb-3">
+                <div class="card-header">PJ #`+pj.Id+`</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img class="img-thumbnail" src="/images/pj_logo.png" alt="logo" width="100" height="100">
+                        </div>
+                        <div class="col-md-9">
+                            <h5 class="card-title">`+ pj.name + `</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">`+ pj.description +`.</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <small class="text-muted">1</small><small class="text-muted"> year or plus</small>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="accordion" id="pjManagerAccordion">
+                                <button class="btn btn-link float-right" type="button" data-toggle="collapse" data-target="#collapse`+pj.Id+`" aria-expanded="true" aria-controls="collapse`+pj.Id+`">
+                                    Requests
+                                    <span class="badge badge-primary">2</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapse`+pj.Id+`" class="collapse hidden" aria-labelledby="headingOne" data-parent="#pjManagerAccordion">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            Ahmed aly
+                            <button class="btn btn-success float-right">Assign</button>
+                        </li>
+                        <li class="list-group-item">
+                            Mohamed fouad
+                            <button class="btn btn-success float-right">Assign</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            `);
+        });
+    }
+
     </script>
 }

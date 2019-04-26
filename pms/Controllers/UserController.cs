@@ -149,12 +149,20 @@ namespace pms.Controllers
 
         public ActionResult CustomerHome()
         {
-            return View("~/Views/Customer/Index.cshtml");
+            var loggedUser = (User)Session["LoggedUser"];
+            if (loggedUser != null)
+                return View("~/Views/Customer/Index.cshtml");
+            else
+                return RedirectToAction("Login", "User");
         }
 
         public ActionResult Profile()
         {
-            return View("~/Views/User/Profile.cshtml");
+            var loggedUser = (User)Session["LoggedUser"];
+            if (loggedUser != null)
+                return View("~/Views/User/Profile.cshtml");
+            else
+                return RedirectToAction("Login", "User");
         }
 
         [HttpGet]
@@ -260,6 +268,60 @@ namespace pms.Controllers
             Session["LoggedUser"] = null;
 
             return RedirectToAction("Login", "User");
+        }
+
+        [HttpPost]
+        public ActionResult EditProfile(User newdata)
+        {
+            var loggedUser = (User)Session["LoggedUser"];
+            using (PMEntities context = new PMEntities())
+            {
+                if (context.Users.Any(u => u.Id == newdata.Id))
+                {
+                    try
+                    {
+                        User editeduser = context.Users.Find(loggedUser.Id);
+                        editeduser.first_name = newdata.first_name;
+                        editeduser.last_name = newdata.last_name;
+                        editeduser.email = newdata.email;
+                        editeduser.jop_description = newdata.jop_description;
+                        editeduser.mobile = newdata.mobile;
+                        context.SaveChanges();
+                        return Json(new { status = "200", data = editeduser, displaySweetAlert = true, message = "User Edited Successfully" }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { status = "400", data = " ", displaySweetAlert = true, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = "404", data = "", message = "User Not found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        [HttpGet]
+        public ActionResult GetUserProfile(int id)
+        {
+            var loggedUser = (User)Session["LoggedUser"];
+            using (PMEntities context = new PMEntities())
+            {
+                if (context.Users.Any(u => u.Id == id))
+                {
+                    User userprofile = context.Users.Find(loggedUser.Id);
+                    double pendingCount = context.projects.Count(p => p.status == 0);
+                    double deliveredCount = context.projects.Count(p => p.status == 1);
+                    double notdeliveredCount = context.projects.Count(p => p.status == 2);
+                    double total = pendingCount + deliveredCount + notdeliveredCount;
+                    double[] customerDashboard = { (pendingCount / total) * 100, (deliveredCount / total) * 100, (notdeliveredCount / total) * 100 };
+                    return Json(new { status = "200", data = userprofile, dashboardData = customerDashboard, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = "404", data = "", message = "User Not found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
         }
     }
 }
