@@ -35,7 +35,7 @@ namespace pms.Controllers
             //context.Users.Remove(user);
             //context.SaveChanges();
             //}
-            return View();
+            return View("~/Views/Customer/Index.cshtml");
         }
 
         public ActionResult About()

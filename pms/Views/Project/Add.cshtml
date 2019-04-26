@@ -4,19 +4,16 @@
         <form id="add_project">
             <div class="form-group">
                 <label for="pjname">Project Name:</label>
-                <input class="form-control" id="pjname" placeholder="Enter project name">
+                <input class="form-control" id="name" name="name" placeholder="Enter project name" required>
             </div>
             <div class="form-group">
                 <label for="project_description">Project Description:</label>
-                <textarea class="form-control" id="project_description" placeholder="Enter project Description"></textarea>
+                <textarea class="form-control" id="description" name="description" placeholder="Enter project Description" required>
+                </textarea>
             </div>
             <div class="form-group">
                 <label for="manager_exp">Manager Experience (years +):</label>
-                <input class="form-control" type="number" id="manager_exp" placeholder="experience in years (1 , 2 , ..)">
-            </div>
-            <div class="form-group">
-                <label for="project_details">Project Details:</label>
-                <input class="form-control-file" type="file" id="project_details">
+                <input class="form-control" type="number" id="exp" name="exp" placeholder="experience in years (1 , 2 , ..)" required>
             </div>
             <button type="submit" class="btn btn-dark btn-block mt-5">Add project</button>
         </form>

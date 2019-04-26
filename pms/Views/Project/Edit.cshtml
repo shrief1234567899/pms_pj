@@ -2,17 +2,18 @@
     <div class="card-header bg-dark text-white">Edit Project</div>
     <div class="card-body">
         <form id="edit_project_form">
+            <input class="form-control edit-project-id" type="hidden" name="Id" id="Id" value="1">
             <div class="form-group">
                 <label for="pjname">Project Name:</label>
-                <input class="form-control edit-project-name" id="pjname" placeholder="Enter project name">
+                <input class="form-control edit-project-name" name="name" id="name" placeholder="Enter project name" required>
             </div>
             <div class="form-group">
                 <label for="project_description">Project Description:</label>
-                <textarea class="form-control edit-project-description" id="project_description" placeholder="Enter project Description"></textarea>
+                <textarea class="form-control edit-project-description" name="description" id="description" placeholder="Enter project Description" required></textarea>
             </div>
             <div class="form-group">
                 <label for="manager_exp">Manager Experience (years +):</label>
-                <input class="form-control edit-project-experience" type="number" id="manager_exp" placeholder="experience in years (1 , 2 , ..)">
+                <input class="form-control edit-project-experience" type="number" id="manager_exp" placeholder="experience in years (1 , 2 , ..)" required>
             </div>
             <button type="submit" class="btn btn-dark btn-block mt-5">Edit</button>
         </form>
