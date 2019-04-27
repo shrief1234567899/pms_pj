@@ -22,10 +22,13 @@ namespace pms.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Last name required")]
         public string last_name { get; set; }
 
-        [Display(Name = "Email ID")]
+        [Display(Name = "Email")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Email required")]
         [DataType(DataType.EmailAddress)]
         public string email { get; set; }
+
+        [Display(Name = "Job Description")]
+        public string jop_description { get; set; }
 
         [Display(Name = "Type")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Type is required")]
@@ -42,6 +45,7 @@ namespace pms.Models
         [DataType(DataType.Password)]
         [Compare("password", ErrorMessage = "Confirm password and password do not match")]
         public string ConfirmPassword { get; set; }
+        
 
     }
 }

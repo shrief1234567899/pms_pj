@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using pms.Models
+@{
+    User LoggedUser = null;
+    if (Session["LoggedUser"] != null)
+    {
+        LoggedUser = (User)Session["LoggedUser"];
+    }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -38,6 +46,14 @@
                                new { controller = "User" },
                                new { @class = "font-weight-bold text-white nav-link" })
                     </li>
+                    @if (LoggedUser != null && LoggedUser.type == "admin")
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Users", "Index",
+                                   new { controller = "User" },
+                                   new { @class = "font-weight-bold text-white nav-link" })
+                        </li>
+                    }
                     <li class="nav-item">
                         @Html.ActionLink("About", "About",
                               new { controller = "Home" },

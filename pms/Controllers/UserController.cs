@@ -5,10 +5,148 @@ using System.Web;
 using System.Web.Mvc;
 using pms.Models;
 using pms;
+using System.IO;
+using System.Data.Entity.Migrations;
+
 namespace pms.Controllers
 {
     public class UserController : Controller
     {
+        // view all users
+        public ActionResult Index()
+        {
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            User current_user = (User)Session["LoggedUser"];
+            int user_id = current_user.Id;
+            using (PMEntities context = new PMEntities())
+            {
+                var users = context.Users.Where(u => u.Id != user_id).ToList();
+                return View(users);
+            }
+
+        }
+        
+        public ActionResult Delete(int id)
+        {
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            using (PMEntities context = new PMEntities())
+            {
+                var users = context.Users.FirstOrDefault(u => u.Id == id);
+                context.Users.Remove(users);
+                context.SaveChanges();
+            }
+
+            ViewBag.Message = "Deleted Successfully";
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        public ActionResult Edit(int id)
+        {
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            
+            using (PMEntities context = new PMEntities())
+            {
+                var users = context.Users.Where(u => u.Id == id).FirstOrDefault();
+                return View(users);
+            }
+        }
+        [HttpPost]
+        public ActionResult Edit (User user)
+        {
+            
+
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            // Model Validation 
+            if (ModelState.IsValid)
+            {
+                if(user.ImageFile != null)
+                {
+
+                string fileName = Path.GetFileNameWithoutExtension(user.ImageFile.FileName);
+                string fileExt = Path.GetExtension(user.ImageFile.FileName);
+                fileName = fileName + DateTime.Now.ToString("yymmssfff") + fileExt;
+                user.photo = "~/Images/" + fileName;
+                fileName = Path.Combine(Server.MapPath("~/Images"), fileName);
+                user.ImageFile.SaveAs(fileName);
+                }
+                
+                using (PMEntities context = new PMEntities())
+                {
+                    User updated_user = context.Users.FirstOrDefault(u => u.Id == user.Id);
+                    updated_user.first_name = user.first_name;
+                    updated_user.last_name = user.last_name;
+
+                    updated_user.jop_description = user.jop_description;
+
+                    updated_user.type = user.type;
+
+                    updated_user.password = user.password;
+                    updated_user.ConfirmPassword = user.ConfirmPassword;
+                    updated_user.photo = user.photo;
+                    updated_user.mobile = user.mobile;
+                    updated_user.email = user.email;
+
+
+                    context.SaveChanges();
+                    ViewBag.Message = "Edit Successfully";
+                    return View(user);
+                }
+            }
+            ViewBag.Error = "Invaild Request";
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(User user)
+        {
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            // Model Validation 
+            if (ModelState.IsValid)
+            {
+                if (user.ImageFile != null)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(user.ImageFile.FileName);
+                    string fileExt = Path.GetExtension(user.ImageFile.FileName);
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + fileExt;
+                    user.photo = "~/Images/" + fileName;
+                    fileName = Path.Combine(Server.MapPath("~/Images"), fileName);
+                    user.ImageFile.SaveAs(fileName);
+                }
+                using (PMEntities context = new PMEntities())
+                {
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                }
+                ViewBag.Message = "Created Successfully";
+            }
+            else
+            {
+                ViewBag.Error = "Invalid Request";
+            }
+
+            return View();
+        }
+
         public ActionResult CustomerHome()
         {
             var loggedUser = (User)Session["LoggedUser"];

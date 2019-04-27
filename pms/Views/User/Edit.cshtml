@@ -1,0 +1,134 @@
+﻿@using pms.Models;
+@model pms.Models.User
+
+@{
+    ViewBag.Title = "Edit";
+
+    string photo_url = null;
+    if (Model.photo != null)
+    {
+        photo_url = Url.Content(Model.photo);
+    }
+}
+
+<h2>Edit</h2>
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        <strong>@ViewBag.Message</strong>
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <strong>@ViewBag.Error </strong>
+    </div>
+}
+<div class="Container">
+    <div class="row">
+        <div class="card mb-3 border-primary col-md-12">
+            <div class="card-header bg-primary text-white font-weight-bold">
+                Edit User
+            </div>
+            <div class="card-body">
+
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card shadow h-50 bg-dark text-white ">
+                                <div class="profile-img mt-2 shadow">
+                                    <img class="shadow rounded" src="@photo_url" alt="profile photo" />
+                                    <div class="file btn btn-lg btn-primary">
+                                        <input type="file" name="ImageFile" />
+                                        Upload Photo
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow p-3 col-md-8">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.first_name)
+                                @Html.EditorFor(model => model.first_name, "HI", new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.first_name, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.last_name)
+                                @Html.EditorFor(model => model.last_name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.last_name, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.type)
+                                <select class="form-control" name="type">
+                                
+                                        @{string x = ""; }
+                                        <option value="admin" @if (Model.type == "admin") { x = "selected"; }
+                                                @x>
+                                            Admin
+                                        </option>
+                                        @{x = ""; }
+                                <option value="customer" @if (Model.type == "customer") { x = "selected"; }
+                                        @x>
+                                    Customer
+                                </option>
+                                @{x = ""; }
+                                <option value="pm" @if (Model.type == "pm") { x = "selected"; }
+                                        @x>
+                                    Project Manager
+                                </option>
+                                @{x = ""; }
+                                <option value="tl" @if (Model.type == "tl") { x = "selected"; }
+                                        @x>
+                                    Team Leader
+                                </option>
+                                @{x = "";}
+                                <option value="je" @if (Model.type == "je") { x = "selected"; }
+                                        @x>
+                                    Junior Engineers
+                                </option>
+
+                                </select>
+                                @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                <label for="job_description">Job Description:</label>
+                                @Html.TextAreaFor(model => model.jop_description, new { @class = "form-control", @cols = 125 })
+                                @Html.ValidationMessageFor(model => model.jop_description, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label for="mobile">Mobile:</label>
+                                @Html.EditorFor(model => model.mobile, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.mobile, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @Value = Model.password } })
+                                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ConfirmPassword)
+                                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" ,@Value = Model.password} })
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block mt-5">Save</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -107,7 +107,7 @@ ipch/
 *.vsp
 *.vspx
 *.sap
-
+/pms/images/*
 # Visual Studio Trace Files
 *.e2e
 
