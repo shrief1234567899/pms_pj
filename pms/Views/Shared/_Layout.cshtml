@@ -22,8 +22,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
         <div class="container">
-            @Html.ActionLink("PMS", "CustomerHome",
-                            new { controller = "User" },
+            @Html.ActionLink("PMS", "Index",
+                            new { controller = "Home" },
                             new { @class = "font-weight-bold text-warning nav-link" })
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -32,8 +32,8 @@
             <div class="navbar-collapse">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        @Html.ActionLink("Home", "CustomerHome",
-                                 new { controller = "User" },
+                        @Html.ActionLink("Dashbord", "Index",
+                                 new { controller = "Home" },
                                  new { @class = "font-weight-bold text-white nav-link" })
                     </li>
                     <li class="nav-item">
