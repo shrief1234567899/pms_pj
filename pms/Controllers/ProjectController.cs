@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,9 +22,48 @@ namespace pms.Controllers
         [HttpGet]
         public ActionResult GetProjectByStatus(int Id)
         {
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
             var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
+                if(loggedUser.type == "admin")
+                {
+                    if(context.projects.Any(p => (p.status == Id)))
+                    {
+                        var projectsData = context.projects.Where(p => (p.status == Id)).ToList();
+
+                        foreach (var pj in projectsData)
+                        {
+                            User user = context.Users.Find(pj.owner_id);
+                            pj.owner = user;
+                        }
+                        return Json(new { status = "200", data = projectsData, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+
+                    }
+                    else if (Id == -1)
+                    {
+                        var projectsData = context.projects.ToList();
+                        foreach(var pj in projectsData)
+                        {
+                            User user = context.Users.Find(pj.owner_id);
+                            pj.owner = user;
+                        }
+                        //var projectsData = context.projects.ToList();
+
+                        if (projectsData.Count == 0)
+                            return Json(new { status = "404", data = "", message = "No Project Found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+
+                        return Json(new { status = "200", data = projectsData, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { status = "404", data = "", message = "No data found with this status", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
                 if (context.projects.Any(p => (p.status == Id && p.owner_id == loggedUser.Id)))
                 {
                     var projectsData = context.projects.Where(p => (p.status == Id && p.owner_id == loggedUser.Id)).ToList();
@@ -61,7 +101,17 @@ namespace pms.Controllers
                 }
             }
         }
-
+        [HttpPost]
+        public ActionResult ChangeStatus(project editData)
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                project pj = context.projects.Find(editData.Id);
+                pj.status = editData.status;
+                context.SaveChanges();
+                return Json(new { status = "200", data = pj });
+            }
+        }
         [HttpPost]
         public ActionResult EditProject(project editdata)
         {
@@ -81,7 +131,46 @@ namespace pms.Controllers
                 }
             }
         }
+        public ActionResult AdminAddProject()
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                var users = context.Users.Where(u => u.type =="customer").ToList();
+                ViewBag.users = users;
+                return View();
+            }
+        }
+        [HttpPost]
+        public ActionResult AdminAddProject(project newproject)
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                int maxPj = context.projects.Count();
+                if (maxPj > 0)
+                {
+                    project last = context.projects.OrderByDescending(p => p.Id).FirstOrDefault();
+                    maxPj = last.Id;
+                }
+                project pj = new project
+                {
+                    Id = maxPj + 1,
+                    name = newproject.name,
+                    status = 0,
+                    description = newproject.description,
+                    owner_id = newproject.owner_id
+                };
+                context.projects.Add(pj);
+                context.SaveChanges();
+                
+                var users = context.Users.Where(u => u.type == "customer").ToList();
+                ViewBag.users = users;
+                    
+                
+                ViewBag.Message = "Project Created Successfully";
+                return View();
+            }
 
+        }
         [HttpPost]
         public ActionResult AddProject(project newproject)
         {
