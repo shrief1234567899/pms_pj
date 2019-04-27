@@ -273,6 +273,7 @@ namespace pms.Controllers
         [HttpPost]
         public ActionResult EditProfile(User newdata)
         {
+            ModelState.Clear();
             var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
@@ -285,6 +286,9 @@ namespace pms.Controllers
                         editeduser.last_name = newdata.last_name;
                         editeduser.email = newdata.email;
                         editeduser.jop_description = newdata.jop_description;
+                        editeduser.type = editeduser.type;
+                        editeduser.password = editeduser.password;
+                        editeduser.ConfirmPassword = editeduser.ConfirmPassword;
                         editeduser.mobile = newdata.mobile;
                         context.SaveChanges();
                         return Json(new { status = "200", data = editeduser, displaySweetAlert = true, message = "User Edited Successfully" }, JsonRequestBehavior.AllowGet);
@@ -344,7 +348,15 @@ namespace pms.Controllers
                     {
                         User editeduser = context.Users.Find(loggedUser.Id);
                         editeduser.photo = fullFileName;
-                        //context.SaveChanges();
+                        editeduser.first_name = editeduser.first_name;
+                        editeduser.last_name = editeduser.last_name;
+                        editeduser.email = editeduser.email;
+                        editeduser.jop_description = editeduser.jop_description;
+                        editeduser.type = editeduser.type;
+                        editeduser.password = editeduser.password;
+                        editeduser.ConfirmPassword = editeduser.password;
+                        editeduser.mobile = editeduser.mobile;
+                        context.SaveChanges();
                     }
                     return Json(new { status = "200", data = fullFileName, displaySweetAlert = true, message = "Photo Uploaded Successfully" }, JsonRequestBehavior.AllowGet);
                 }
