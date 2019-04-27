@@ -172,9 +172,9 @@ namespace pms.Controllers
                 if (context.Users.Any(u => u.Id == id))
                 {
                     User userprofile = context.Users.Find(loggedUser.Id);
-                    double pendingCount = context.projects.Count(p => p.status == 0);
-                    double deliveredCount = context.projects.Count(p => p.status == 1);
-                    double notdeliveredCount = context.projects.Count(p => p.status == 2);
+                    double pendingCount = context.projects.Count(p => (p.status == 0 && p.owner_id == loggedUser.Id));
+                    double deliveredCount = context.projects.Count(p => (p.status == 1 && p.owner_id == loggedUser.Id));
+                    double notdeliveredCount = context.projects.Count(p => (p.status == 2 && p.owner_id == loggedUser.Id));
                     double total = pendingCount + deliveredCount + notdeliveredCount;
                     double[] customerDashboard = { (pendingCount / total) * 100, (deliveredCount / total) * 100, (notdeliveredCount / total) * 100 };
                     return Json(new { status = "200", data = userprofile, dashboardData = customerDashboard, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
@@ -184,6 +184,38 @@ namespace pms.Controllers
                     return Json(new { status = "404", data = "", message = "User Not found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
             }
+        }
+
+        [HttpPost]
+        public ActionResult ProfilePhotoHandler()
+        {
+            var loggedUser = (User)Session["LoggedUser"];
+
+            if (Request.Files != null)
+            {
+                HttpPostedFileBase file = Request.Files[0];
+                int fileSize = file.ContentLength;
+                string fileName = file.FileName;
+                string mimeType = file.ContentType;
+                if (mimeType.Contains("image"))
+                {
+                    System.IO.Stream fileContent = file.InputStream;
+                    string fullFileName = new Random().Next().ToString() + fileName + System.IO.Path.GetExtension(fileName);
+                    file.SaveAs(Server.MapPath("~/uploads/") + fullFileName);
+                    using (PMEntities context = new PMEntities())
+                    {
+                        User editeduser = context.Users.Find(loggedUser.Id);
+                        editeduser.photo = fullFileName;
+                        //context.SaveChanges();
+                    }
+                    return Json(new { status = "200", data = fullFileName, displaySweetAlert = true, message = "Photo Uploaded Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = "404", data = "", displaySweetAlert = true, message = "File not allowed" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { status = "404", data = "", displaySweetAlert = true, message = "Retry Again" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
