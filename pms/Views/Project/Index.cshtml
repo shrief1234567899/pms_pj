@@ -1,6 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "Projects";
+                /**/
+
+                ViewBag.Title = "Projects";
 }
 
 <ul class="nav nav-tabs">
@@ -9,6 +11,15 @@
     </li>
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#pending" status="0">Pending</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#approved" status="3">Approved</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#declined" status="4">Declined</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#inprogress" status="5">In Progress</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#delivered" status="1">Delivered</a>
@@ -25,6 +36,12 @@
                 <div id="all" class="tab-pane active">
                 </div>
                 <div id="pending" class="tab-pane fade">
+                </div>
+                <div id="approved" class="tab-pane fade">
+                </div>
+                <div id="declined" class="tab-pane fade">
+                </div>
+                <div id="inprogress" class="tab-pane fade">
                 </div>
                 <div id="delivered" class="tab-pane fade">
                 </div>
@@ -76,8 +93,7 @@
     $('body').on("click", '.delete-pj-icon' , function (event) {
         var projectId = $(this).attr('id');
 
-        AjaxRequest('POST', 'DeleteProject', 'Project', projectId);
-        $('.list-project-card.' + projectId).slideUp();
+        AjaxRequest('POST', 'DeleteProject', 'Project', projectId, disappeaProject , $('.list-project-card.' + projectId));
     })
 
     $('#edit_project_form').submit(function(){
@@ -177,6 +193,18 @@
                 var style = "danger";//not delivered
                 var status = "not delivered";
             }
+            if (pj.status == 3) {
+                var style = "dark";//approved
+                var status = "approved";
+            }
+            if (pj.status == 4) {
+                var style = "dark";//declined
+                var status = "declined";
+            }
+            if (pj.status == 5) {
+                var style = "secondary";//declined
+                var status = "in progress";
+            }
             viewobjt.prepend(`
              <div class="card border-primary shadow mb-3 list-project-card `+pj.Id+`">
                 <div class="card-header text-white bg-`+style+`">
@@ -209,6 +237,13 @@
             </div>
             `);
         });
+        }
+
+    function disappeaProject(data, viewobj)
+    {
+        if (data != 0) {
+            viewobj.slideUp();
+        }
     }
     </script>
 }

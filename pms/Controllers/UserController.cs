@@ -28,7 +28,7 @@ namespace pms.Controllers
             }
 
         }
-        
+
         public ActionResult Delete(int id)
         {
             if (Session["LoggedUser"] == null)
@@ -57,7 +57,7 @@ namespace pms.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
-            
+
             using (PMEntities context = new PMEntities())
             {
                 var users = context.Users.Where(u => u.Id == id).FirstOrDefault();
@@ -65,9 +65,9 @@ namespace pms.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Edit (User user)
+        public ActionResult Edit(User user)
         {
-            
+
 
             if (Session["LoggedUser"] == null)
             {
@@ -76,17 +76,17 @@ namespace pms.Controllers
             // Model Validation 
             if (ModelState.IsValid)
             {
-                if(user.ImageFile != null)
+                if (user.ImageFile != null)
                 {
 
-                string fileName = Path.GetFileNameWithoutExtension(user.ImageFile.FileName);
-                string fileExt = Path.GetExtension(user.ImageFile.FileName);
-                fileName = fileName + DateTime.Now.ToString("yymmssfff") + fileExt;
-                user.photo = "~/Images/" + fileName;
-                fileName = Path.Combine(Server.MapPath("~/Images"), fileName);
-                user.ImageFile.SaveAs(fileName);
+                    string fileName = Path.GetFileNameWithoutExtension(user.ImageFile.FileName);
+                    string fileExt = Path.GetExtension(user.ImageFile.FileName);
+                    fileName = fileName + DateTime.Now.ToString("yymmssfff") + fileExt;
+                    user.photo = "~/Images/" + fileName;
+                    fileName = Path.Combine(Server.MapPath("~/Images"), fileName);
+                    user.ImageFile.SaveAs(fileName);
                 }
-                
+
                 using (PMEntities context = new PMEntities())
                 {
                     User updated_user = context.Users.FirstOrDefault(u => u.Id == user.Id);
@@ -288,7 +288,7 @@ namespace pms.Controllers
                         editeduser.jop_description = newdata.jop_description;
                         editeduser.type = editeduser.type;
                         editeduser.password = editeduser.password;
-                        editeduser.ConfirmPassword = editeduser.ConfirmPassword;
+                        editeduser.ConfirmPassword = editeduser.password;
                         editeduser.mobile = newdata.mobile;
                         context.SaveChanges();
                         return Json(new { status = "200", data = editeduser, displaySweetAlert = true, message = "User Edited Successfully" }, JsonRequestBehavior.AllowGet);
@@ -317,8 +317,9 @@ namespace pms.Controllers
                     double pendingCount = context.projects.Count(p => (p.status == 0 && p.owner_id == loggedUser.Id));
                     double deliveredCount = context.projects.Count(p => (p.status == 1 && p.owner_id == loggedUser.Id));
                     double notdeliveredCount = context.projects.Count(p => (p.status == 2 && p.owner_id == loggedUser.Id));
-                    double total = pendingCount + deliveredCount + notdeliveredCount;
-                    double[] customerDashboard = { (pendingCount / total) * 100, (deliveredCount / total) * 100, (notdeliveredCount / total) * 100 };
+                    double inprogress = context.projects.Count(p => (p.status == 5 && p.owner_id == loggedUser.Id));
+                    double total = pendingCount + deliveredCount + notdeliveredCount + inprogress;
+                    double[] customerDashboard = { (pendingCount / total) * 100, (deliveredCount / total) * 100, (notdeliveredCount / total) * 100 , (inprogress / total) * 100 };
                     return Json(new { status = "200", data = userprofile, dashboardData = customerDashboard, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
                 else

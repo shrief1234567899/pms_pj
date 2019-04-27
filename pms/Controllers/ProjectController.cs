@@ -12,7 +12,7 @@ namespace pms.Controllers
         public ActionResult Index()
         {
             var loggedUser = (User)Session["LoggedUser"];
-            if(loggedUser!=null)
+            if (loggedUser != null)
                 return View();
             else
                 return RedirectToAction("Login", "User");
@@ -34,7 +34,7 @@ namespace pms.Controllers
                     var projectsData = context.projects.Where(p => (p.owner_id == loggedUser.Id)).ToList();
 
                     if (projectsData.Count == 0)
-                        return Json(new { status = "404", data = "", message = "No Project Found", displaySweetAlert = false}, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = "404", data = "", message = "No Project Found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
 
                     return Json(new { status = "200", data = projectsData, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
@@ -115,17 +115,48 @@ namespace pms.Controllers
             {
                 if (context.projects.Any(p => p.Id == id))
                 {
-                    var project = new project { Id = id };
-                    context.projects.Attach(project);
-                    context.projects.Remove(project);
-                    context.SaveChanges();
-                    return Json(new { status = "200", data = " ", displaySweetAlert = true, message = "Project Deleted Successfully" }, JsonRequestBehavior.AllowGet);
+                    List<Int32> allowedStatusToDelete = new List<int>();
+                    allowedStatusToDelete.Add(0); allowedStatusToDelete.Add(3); allowedStatusToDelete.Add(4);
+                    project pj = context.projects.Find(id);
+                    if (allowedStatusToDelete.Contains((int)pj.status))
+                    {
+                        context.projects.Remove(pj);
+                        context.SaveChanges();
+                        return Json(new { status = "200", data = 1, displaySweetAlert = true, message = "Project Deleted Successfully" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { status = "444", data = 0, displaySweetAlert = false, message = "You Can't delete this project" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = "404", data = 0, message = "project not found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        /*[HttpGet]
+        public ActionResult GetPjManagerRequests(int id)
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                if (context.pj_manager_request.Any(p => p.project_id == id))
+                {
+                    pj_manager_request requests = context.pj_manager_request.FirstOrDefault(p => p.project_id == id);
+                    return Json(new { status = "200", data = requests, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     return Json(new { status = "404", data = "", message = "project not found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
             }
+        }*/
+
+        [HttpPost]
+        public ActionResult AssignUser(object assigningData)
+        {
+            return Json(new { status = "200", data = assigningData, displaySweetAlert = true, message = "Project Assigned Successfully" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
