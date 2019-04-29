@@ -12,7 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
           <Property Name="project_manager_id" Type="int" Nullable="false" />
-          <Property Name="comment" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="comment" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="project">
           <Key>
@@ -21,9 +21,9 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="varchar" MaxLength="255" />
-
           <Property Name="status" Type="int" />
           <Property Name="owner_id" Type="int" />
+          <Property Name="project_manager_id" Type="int" />
         </EntityType>
         <EntityType Name="Teams">
           <Key>
@@ -32,10 +32,6 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
-
-          <Property Name="project_manager_id" Type="int" />
-          <Property Name="status" Type="int" Nullable="false" />
-          <Property Name="owner_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -69,7 +65,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="project_id" Type="Int32" Nullable="false" />
           <Property Name="project_manager_id" Type="Int32" Nullable="false" />
-          <Property Name="comment" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="comment" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="project">
           <Key>
@@ -78,9 +74,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-
           <Property Name="status" Type="Int32" />
           <Property Name="owner_id" Type="Int32" />
+          <Property Name="project_manager_id" Type="Int32" />
         </EntityType>
         <EntityType Name="Team">
           <Key>
@@ -89,11 +85,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="project_id" Type="Int32" Nullable="false" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
-
-          <Property Name="project_manager_id" Type="Int32" />
-          <Property Name="status" Type="Int32" Nullable="false" />
-          <Property Name="owner_id" Type="Int32" Nullable="false" />
-
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -137,9 +128,9 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="project_manager_id" ColumnName="project_manager_id" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="owner_id" ColumnName="owner_id" />
+                <ScalarProperty Name="project_manager_id" ColumnName="project_manager_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
