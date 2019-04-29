@@ -277,7 +277,7 @@ namespace pms.Controllers
             var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
-                if (context.Users.Any(u => u.Id == newdata.Id))
+                if (context.Users.Any(u => u.Id == loggedUser.Id))
                 {
                     try
                     {
@@ -311,7 +311,7 @@ namespace pms.Controllers
             var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
-                if (context.Users.Any(u => u.Id == id))
+                if (context.Users.Any(u => u.Id == loggedUser.Id))
                 {
                     User userprofile = context.Users.Find(loggedUser.Id);
                     double pendingCount = context.projects.Count(p => (p.status == 0 && p.owner_id == loggedUser.Id));

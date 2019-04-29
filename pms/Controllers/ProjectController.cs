@@ -93,6 +93,7 @@ namespace pms.Controllers
                 if (context.projects.Any(p => p.Id == id))
                 {
                     project pj = context.projects.Find(id);
+                    pj.project_manager = context.Users.Find(pj.project_manager_id);
                     return Json(new { status = "200", data = pj, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -225,27 +226,45 @@ namespace pms.Controllers
             }
         }
 
-        /*[HttpGet]
+        [HttpGet]
         public ActionResult GetPjManagerRequests(int id)
         {
             using (PMEntities context = new PMEntities())
             {
                 if (context.pj_manager_request.Any(p => p.project_id == id))
                 {
-                    pj_manager_request requests = context.pj_manager_request.FirstOrDefault(p => p.project_id == id);
+                    var requests = context.pj_manager_request.Where(p => (p.project_id == id)).ToList();
+                    foreach(var req in requests)
+                    {
+                        req.project_manager = context.Users.FirstOrDefault(u => u.Id == req.project_manager_id);
+                    }
                     return Json(new { status = "200", data = requests, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = "404", data = "", message = "there's no user assigned", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AssignUser(pj_manager_request request)
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                if (context.projects.Any(p => p.Id == request.project_id))
+                {
+                    project pj = context.projects.Find(request.project_id);
+                    pj.project_manager_id = request.project_manager_id;
+                    pj.status = 5;
+                    context.SaveChanges();
+                    return Json(new { status = "200", data = request, displaySweetAlert = true, message = "Project Assigned Successfully" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     return Json(new { status = "404", data = "", message = "project not found", displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
             }
-        }*/
-
-        [HttpPost]
-        public ActionResult AssignUser(object assigningData)
-        {
-            return Json(new { status = "200", data = assigningData, displaySweetAlert = true, message = "Project Assigned Successfully" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

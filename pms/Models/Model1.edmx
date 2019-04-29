@@ -21,6 +21,7 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="varchar" MaxLength="255" />
+          <Property Name="project_manager_id" Type="int" />
           <Property Name="status" Type="int" Nullable="false" />
           <Property Name="owner_id" Type="int" Nullable="false" />
         </EntityType>
@@ -64,6 +65,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="project_manager_id" Type="Int32" />
           <Property Name="status" Type="Int32" Nullable="false" />
           <Property Name="owner_id" Type="Int32" Nullable="false" />
         </EntityType>
@@ -108,6 +110,7 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="project_manager_id" ColumnName="project_manager_id" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="owner_id" ColumnName="owner_id" />
               </MappingFragment>

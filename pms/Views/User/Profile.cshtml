@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="mobile">Mobile:</label>
-                                <input class="form-control" type="number" id="mobile" placeholder="mobile">
+                                <input class="form-control" type="number" name="mobile" id="mobile" placeholder="mobile">
                             </div>
                             <button type="submit" class="btn btn-primary btn-block mt-5">Edit</button>
                             <div class="text-center"><i class="fas fa-4x fa-spinner fa-spin text-dark"></i></div>
@@ -62,7 +62,7 @@
     <script>
     $('.fa-spinner').hide();
 
-    AjaxRequest('GET', 'GetUserProfile', 'User', 1, displayUserdata);
+    AjaxRequest('GET', 'GetUserProfile', 'User', 1, displayUserdata , null);
 
     $(document).ready(function(){
         $('input[type="file"]').change(function () {
@@ -110,10 +110,12 @@
             contentType: "application/json; charset=utf-8",
             data:data,
             dataType: "json",
-            success: function (data){
+            success: function (data) {
                 OnSuccessCall(data , handledata , viewobj);
             },
-            error: OnErrorCall
+            error: function (data) {
+                OnErrorCall(data);
+            },
         });
     }
 
@@ -132,7 +134,7 @@
     }
 
     function OnErrorCall(response) {
-      /*response (status , data , displaySweetAlert , message)*/
+        /*response (status , data , displaySweetAlert , message)*/
       if(response.displaySweetAlert){
         swal("Error Occured!", response.message , "error")
         }

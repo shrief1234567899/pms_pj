@@ -91,7 +91,7 @@
                 swal("Good job!", response.message , "success")
             }
             if (response.status != "200") {
-                swal("Error Occured!", response.message , "error")
+                swal("Info", response.message , "info")
             }
             $('.fa-spinner').hide();
         }
@@ -163,14 +163,6 @@
                     </div>
                     <div id="collapse`+pj.Id+`" class="collapse hidden" aria-labelledby="headingOne" data-parent="#pjManagerAccordion">
                         <ul class="list-group list-group-flush pjmanagerlist `+pj.Id+`">
-                            <li class="list-group-item">
-                                Ahmed aly
-                                <button class="btn btn-success float-right">Assign</button>
-                            </li>
-                            <li class="list-group-item">
-                                Mohamed fouad
-                                <button class="btn btn-success float-right">Assign</button>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -184,13 +176,36 @@
             $.each(data, function (key , request) {
                 viewobj.prepend(`
                     <li class="list-group-item">
-                        `+ request.first_name + request.last_name + `
-                        <button class="btn btn-success float-right assign-user" project_id="`+ request.project_id + `" manager_id="` + request.project_manager_id +`">
-                        Assign
-                        </button>
+                        <div class="float-left">
+                            `+ request.project_manager.first_name + request.project_manager.last_name + `
+                            <p class="text-muted">`+ request.comment +`</p>
+                        </div>
+                        <div class="float-right">
+                            <button class="btn btn-success float-right assign-user" project_id="`+ request.project_id + `" manager_id="` + request.project_manager_id +`">
+                            Assign
+                            </button>
+                        </div>
                     </li>
                 `);
             });
         }
+
+        $("body").on("click", ".assign-user", function () {
+            $('.fa-spinner').show();
+
+            var urlAction = '@Url.Action("AssignUser", "Project")';
+
+            $.ajax({
+                type: "POST",
+                url: urlAction,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({ 'project_id': $(this).attr('project_id'), 'project_manager_id': $(this).attr('manager_id') }),
+                success: function (data){
+                    OnSuccessCall(data , null , null);
+                },
+                error: OnErrorCall
+            });
+        });
     </script>
 }
