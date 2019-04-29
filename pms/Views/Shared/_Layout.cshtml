@@ -36,7 +36,7 @@
                                  new { controller = "Home" },
                                  new { @class = "font-weight-bold text-white nav-link" })
                     </li>
-                    @if (LoggedUser != null && LoggedUser.type == "customer")
+                    @if (LoggedUser != null && (LoggedUser.type == "customer" || LoggedUser.type == "pm"))
                     {
                         <li class="nav-item">
 

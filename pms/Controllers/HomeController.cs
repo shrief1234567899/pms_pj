@@ -52,6 +52,16 @@ namespace pms.Controllers
 
         public ActionResult PmDashboard()
         {
+            IDictionary<int, string> status = new Dictionary<int, string>();
+            status[0] = "Pending";
+            status[1] = "Delivered";
+            status[2] = "Not Delivered";
+            status[3] = "Approved";
+            status[4] = "Decline";
+            status[5] = "In Progress";
+
+            ViewBag.status = status;
+
             using (PMEntities context = new PMEntities())
             {
                 var projects = context.projects.Where(c => c.status == 3).ToList();

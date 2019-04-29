@@ -20,7 +20,13 @@
         <th>
             @Html.DisplayNameFor(model => model.owner_id)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            Actions
+        </th>
+        <th>Write your Comment</th>
     </tr>
 
 @foreach (var item in Model) {
@@ -38,8 +44,22 @@
             @Html.DisplayFor(modelItem => item.owner_id)
         </td>
         <td>
-            <a href="@Url.Action("Delete", "Project", new { id = item.Id})">Delete</a>
+            <a href="@Url.Action("ChangeStatusP", "Project", new { id = item.Id})">
+                <button class="btn btn-primary">In Progress</button>
+            </a>
+            <a href="@Url.Action("ChangeStatusD", "Project", new { id = item.Id})">
+                <button class="btn btn-primary">Delivered</button>
+            </a>
+        </td>
+        <td>
+            <a href="@Url.Action("Delete", "Project", new { id = item.Id})">Delete</a> |
             <a href="@Url.Action("CreateTeam", "Project", new { id = item.Id})">Create Team</a>
+        </td>
+        <td>
+            <form action="@Url.Action("SaveComment", "Project")">
+                <input name="project_id" type="hidden" value="@item.Id" />
+                <input name="comment" type="text" placeholder="Write Your Comment"/>
+            </form>
         </td>
     </tr>
 }

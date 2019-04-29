@@ -315,5 +315,49 @@ namespace pms.Controllers
                 return RedirectToAction("PmDashboard", "Home");
             }
         }
+
+        public ActionResult ChangeStatusP(int id)
+        {
+
+            using (PMEntities context = new PMEntities())
+            {
+                var project = context.projects.Single(c => c.Id == id);
+                project.status = 5;
+                context.SaveChanges();
+
+            }
+
+            return RedirectToAction("PmDashboard", "Home");
+
+        }
+
+        public ActionResult ChangeStatusD(int id)
+        {
+
+            using (PMEntities context = new PMEntities())
+            {
+                var project = context.projects.Single(c => c.Id == id);
+                project.status = 1;
+                context.SaveChanges();
+
+            }
+
+            return RedirectToAction("PmDashboard", "Home");
+
+        }
+
+        public ActionResult SaveComment(pj_manager_request req) {
+
+            var loggedUser = (User)Session["LoggedUser"];
+            req.project_manager_id = loggedUser.Id;
+
+            using (PMEntities context = new PMEntities())
+            {
+                context.pj_manager_request.Add(req);
+                context.SaveChanges();
+            }
+            return RedirectToAction("PmDashboard", "Home");
+
+        }
     }
 }
