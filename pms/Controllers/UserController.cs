@@ -319,6 +319,8 @@ namespace pms.Controllers
                     double notdeliveredCount = context.projects.Count(p => (p.status == 2 && p.owner_id == loggedUser.Id));
                     double inprogress = context.projects.Count(p => (p.status == 5 && p.owner_id == loggedUser.Id));
                     double total = pendingCount + deliveredCount + notdeliveredCount + inprogress;
+                    if (total == 0)
+                        total = 1;
                     double[] customerDashboard = { (pendingCount / total) * 100, (deliveredCount / total) * 100, (notdeliveredCount / total) * 100 , (inprogress / total) * 100 };
                     return Json(new { status = "200", data = userprofile, dashboardData = customerDashboard, displaySweetAlert = false }, JsonRequestBehavior.AllowGet);
                 }
