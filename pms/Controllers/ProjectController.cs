@@ -29,9 +29,9 @@ namespace pms.Controllers
             var loggedUser = (User)Session["LoggedUser"];
             using (PMEntities context = new PMEntities())
             {
-                if(loggedUser.type == "admin")
+                if (loggedUser.type == "admin")
                 {
-                    if(context.projects.Any(p => (p.status == Id)))
+                    if (context.projects.Any(p => (p.status == Id)))
                     {
                         var projectsData = context.projects.Where(p => (p.status == Id)).ToList();
 
@@ -46,7 +46,7 @@ namespace pms.Controllers
                     else if (Id == -1)
                     {
                         var projectsData = context.projects.ToList();
-                        foreach(var pj in projectsData)
+                        foreach (var pj in projectsData)
                         {
                             User user = context.Users.Find(pj.owner_id);
                             pj.owner = user;
@@ -135,7 +135,7 @@ namespace pms.Controllers
         {
             using (PMEntities context = new PMEntities())
             {
-                var users = context.Users.Where(u => u.type =="customer").ToList();
+                var users = context.Users.Where(u => u.type == "customer").ToList();
                 ViewBag.users = users;
                 return View();
             }
@@ -161,11 +161,11 @@ namespace pms.Controllers
                 };
                 context.projects.Add(pj);
                 context.SaveChanges();
-                
+
                 var users = context.Users.Where(u => u.type == "customer").ToList();
                 ViewBag.users = users;
-                    
-                
+
+
                 ViewBag.Message = "Project Created Successfully";
                 return View();
             }
@@ -246,6 +246,55 @@ namespace pms.Controllers
         public ActionResult AssignUser(object assigningData)
         {
             return Json(new { status = "200", data = assigningData, displaySweetAlert = true, message = "Project Assigned Successfully" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CreateTeam(int Id)
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                var allUsers = context.Users.Where(c => c.type == "je" || c.type == "tl").ToList();
+
+                var notAssignedUsers = new List<User>();
+
+
+                foreach (var user in allUsers)
+                {
+                    if (context.Teams.Where(c => c.user_id == user.Id && c.project_id == Id).FirstOrDefault() == null)
+                    {
+                        notAssignedUsers.Add(user);
+                    }
+                }
+
+                ViewBag.project = context.projects.Single(c => c.Id == Id);
+
+                return View(notAssignedUsers);
+            }
+
+        }
+
+
+        [HttpPost]
+        public ActionResult AddProjectWorker(Team team)
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                context.Teams.Add(team);
+                context.SaveChanges();
+                return Json(new { delteam = team, status = "200", data = 1, message = "project not found", displaySweetAlert = true }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                var project = context.projects.Single(c => c.Id == id);
+                context.projects.Remove(project);
+                context.SaveChanges();
+
+                return RedirectToAction("PmDashboard", "Home");
+            }
         }
     }
 }

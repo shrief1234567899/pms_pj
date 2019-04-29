@@ -26,6 +26,7 @@ namespace pms.Models
         }
     
         public virtual DbSet<project> projects { get; set; }
+        public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }
 }

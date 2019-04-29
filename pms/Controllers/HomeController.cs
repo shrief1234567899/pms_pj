@@ -19,6 +19,8 @@ namespace pms.Controllers
                 return RedirectToAction("AdminDashboard");
             else if(user.type == "customer")
                 return View("~/Views/Customer/Index.cshtml");
+            else if (user.type == "pm")
+                return RedirectToAction("PmDashboard");
             // using (PMEntities context = new PMEntities())
             ///{
             /* User user = new User()
@@ -46,6 +48,16 @@ namespace pms.Controllers
         public ActionResult AdminDashboard()
         {
             return View();
+        }
+
+        public ActionResult PmDashboard()
+        {
+            using (PMEntities context = new PMEntities())
+            {
+                var projects = context.projects.Where(c => c.status == 3).ToList();
+                return View(projects);
+            }
+
         }
 
         public ActionResult About()

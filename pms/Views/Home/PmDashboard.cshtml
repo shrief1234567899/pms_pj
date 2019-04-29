@@ -1,0 +1,50 @@
+﻿@model IEnumerable<pms.Models.project>
+
+@{
+    ViewBag.Title = "PmDashboard";
+}
+
+<h2>PmDashboard</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.owner_id)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.owner_id)
+        </td>
+        <td>
+            <a href="@Url.Action("Delete", "Project", new { id = item.Id})">Delete</a>
+            <a href="@Url.Action("CreateTeam", "Project", new { id = item.Id})">Create Team</a>
+        </td>
+    </tr>
+}
+
+</table>

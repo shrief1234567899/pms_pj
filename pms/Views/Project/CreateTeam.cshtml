@@ -1,0 +1,103 @@
+﻿@model IEnumerable<pms.Models.User>
+
+@{
+    ViewBag.Title = "CreateTeam";
+}
+
+<h2>CreateTeam</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.first_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.last_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.jop_description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.photo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mobile)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.password)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.first_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.last_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.jop_description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.photo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mobile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.password)
+            </td>
+            <td>
+                <input type="checkbox" class="add-to-team" data-project="@ViewBag.project.Id" data-user="@item.Id"/>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts{
+    <script>
+        $(document).on('click', '.add-to-team', function () {
+
+            let mythis = $(this);
+
+            let data = {
+                'project_id': $(this).data("project"),
+                'user_id': $(this).data("user")
+            };
+
+            let str_data = JSON.stringify(data);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddProjectWorker", "Project")",
+                contentType: "application/json; charset=utf-8",
+                data: str_data,
+                dataType: "json",
+                success: function (data) {
+                    mythis.parents("tr").remove();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+}

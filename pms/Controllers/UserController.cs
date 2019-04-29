@@ -368,5 +368,7 @@ namespace pms.Controllers
             }
             return Json(new { status = "404", data = "", displaySweetAlert = true, message = "Retry Again" }, JsonRequestBehavior.AllowGet);
         }
+
+        
     }
 }
