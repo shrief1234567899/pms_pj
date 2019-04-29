@@ -12,14 +12,11 @@ namespace pms.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class project
+    public partial class pj_manager_request
     {
         public int Id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public int status { get; set; }
-        public int owner_id { get; set; }
-        public User owner { set; get; }
-
+        public int project_id { get; set; }
+        public int project_manager_id { get; set; }
+        public string comment { get; set; }
     }
 }
