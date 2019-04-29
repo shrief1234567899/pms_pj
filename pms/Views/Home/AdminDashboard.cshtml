@@ -195,7 +195,7 @@
             swal("Good job!", response.message , "success")
         }
         if (response.status != "200") {
-            swal("Error Occured!", response.message , "error")
+            swal("Info!", response.message , "info")
         }
         $('.fa-spinner').hide();
     }
@@ -210,6 +210,12 @@
 
     function ViewProject(data , viewobj) {
         if (data) {
+            if (data.project_manager) {
+                manager_name = data.project_manager.first_name + data.project_manager.last_name;
+            }
+            else {
+                manager_name = "";
+            }
            $('.edit-project').hide();
           var status = $(viewobj).attr('status');
           var viewProjectCardHeader = $('.view-project-header');
@@ -223,12 +229,11 @@
           viewProjectCard.addClass('card mb-3 shadow view-project-card border-' + status);
           $('.view-project-name').text(data.name);
           $('.view-project-description').text(data.description);
-          $('.view-project-experience').text('exp');
+          $('.view-project-experience').text('1 year or plus');
           $('.view-project-header').text('PJ #'+data.Id);
           $('.view-project-footer').text(data.name);
           $('.view-project-manager').html(`
-                      manager name
-                      <span class="badge badge-dark float-right">Assigned from test date</span>`);
+                      `+ manager_name + ``);
           viewProjectCard.hide();
           viewProjectCard.fadeToggle();
         }

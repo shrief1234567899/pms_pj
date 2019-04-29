@@ -36,11 +36,16 @@
                                  new { controller = "Home" },
                                  new { @class = "font-weight-bold text-white nav-link" })
                     </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Projects", "Index",
-                                 new { controller = "Project" },
-                                 new { @class = "font-weight-bold text-white nav-link" })
-                    </li>
+                    @if (LoggedUser != null && LoggedUser.type == "customer")
+                    {
+                        <li class="nav-item">
+
+                            @Html.ActionLink("Projects", "Index",
+                                          new { controller = "Project" },
+                                          new { @class = "font-weight-bold text-white nav-link" })
+                        </li>
+                    }
+
                     <li class="nav-item">
                         @Html.ActionLink("Profile", "Profile",
                                new { controller = "User" },

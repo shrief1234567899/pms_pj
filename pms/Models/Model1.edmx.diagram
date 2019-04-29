@@ -7,6 +7,10 @@
       <Diagram DiagramId="3bc5d76155cf4401a198a91cc890c150" Name="Diagram1">
         <EntityTypeShape EntityType="PMModel.project" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PMModel.Team" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="511f23aba04646469ec4abab3cc799cb" Name="Diagram1">
+        <EntityTypeShape EntityType="PMModel.pj_manager_request" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PMModel.project" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+
         <EntityTypeShape EntityType="PMModel.User" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>

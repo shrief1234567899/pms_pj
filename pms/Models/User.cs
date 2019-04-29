@@ -12,7 +12,6 @@ namespace pms.Models
     using System;
     using System.Collections.Generic;
     using System.Web;
-
     public partial class User
     {
         public int Id { get; set; }
@@ -24,7 +23,7 @@ namespace pms.Models
         public string mobile { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-
         public HttpPostedFileBase ImageFile { get; set; }
+        
     }
 }

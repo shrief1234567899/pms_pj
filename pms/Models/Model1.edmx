@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="PMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pj_manager_request">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="project_manager_id" Type="int" Nullable="false" />
+          <Property Name="comment" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
         <EntityType Name="project">
           <Key>
             <PropertyRef Name="Id" />
@@ -12,6 +21,7 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="varchar" MaxLength="255" />
+
           <Property Name="status" Type="int" />
           <Property Name="owner_id" Type="int" />
         </EntityType>
@@ -22,6 +32,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
+
+          <Property Name="project_manager_id" Type="int" />
+          <Property Name="status" Type="int" Nullable="false" />
+          <Property Name="owner_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -38,6 +52,7 @@
           <Property Name="password" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityContainer Name="PMModelStoreContainer">
+          <EntitySet Name="pj_manager_request" EntityType="Self.pj_manager_request" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teams" EntityType="Self.Teams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -47,6 +62,15 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="pj_manager_request">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="project_manager_id" Type="Int32" Nullable="false" />
+          <Property Name="comment" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
         <EntityType Name="project">
           <Key>
             <PropertyRef Name="Id" />
@@ -54,6 +78,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+
           <Property Name="status" Type="Int32" />
           <Property Name="owner_id" Type="Int32" />
         </EntityType>
@@ -64,6 +89,11 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="project_id" Type="Int32" Nullable="false" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
+
+          <Property Name="project_manager_id" Type="Int32" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+          <Property Name="owner_id" Type="Int32" Nullable="false" />
+
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -80,6 +110,7 @@
           <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="PMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="pj_manager_request" EntityType="Self.pj_manager_request" />
           <EntitySet Name="projects" EntityType="Self.project" />
           <EntitySet Name="Teams" EntityType="Self.Team" />
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -90,12 +121,23 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="PMModelStoreContainer" CdmEntityContainer="PMEntities">
+          <EntitySetMapping Name="pj_manager_request">
+            <EntityTypeMapping TypeName="PMModel.pj_manager_request">
+              <MappingFragment StoreEntitySet="pj_manager_request">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="project_manager_id" ColumnName="project_manager_id" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="projects">
             <EntityTypeMapping TypeName="PMModel.project">
               <MappingFragment StoreEntitySet="project">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="project_manager_id" ColumnName="project_manager_id" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="owner_id" ColumnName="owner_id" />
               </MappingFragment>

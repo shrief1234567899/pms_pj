@@ -11,16 +11,16 @@ namespace pms.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class project
     {
         public int Id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
-        public Nullable<int> status { get; set; }
-        [ForeignKey("User")]
+        public Nullable<int> project_manager_id { get; set; }
+        public int status { get; set; }
         public int owner_id { get; set; }
         public User owner { get; set; }
+        public User project_manager { get; set; }
     }
 }

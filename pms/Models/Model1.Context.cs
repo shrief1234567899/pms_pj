@@ -25,6 +25,7 @@ namespace pms.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<pj_manager_request> pj_manager_request { get; set; }
         public virtual DbSet<project> projects { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<User> Users { get; set; }

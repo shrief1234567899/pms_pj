@@ -18,5 +18,6 @@ namespace pms.Models
         public int project_id { get; set; }
         public int project_manager_id { get; set; }
         public string comment { get; set; }
+        public User project_manager { get; set; }
     }
 }
