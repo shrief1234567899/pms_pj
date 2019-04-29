@@ -16,162 +16,181 @@
 
 @section scripts{
     <script>
-    $('.fa-spinner').hide();
-    AjaxRequest('GET' , 'GetProjectByStatus' , 'Project' , 0 , displayPendingProjects , $('.projects'));
-
-    $('#add_project').submit(function(){
-        $('.fa-spinner').show();
-        var urlAction = '@Url.Action("AddProject", "Project")';
-
-        $.post(urlAction, $('#add_project').serialize(), function (data) {
-        OnSuccessCall(data, null, null);
-        $('.projects').prepend(`
-            <div class="card shadow mb-3" id="`+data.data.Id+`">
-                <div class="card-header">new project</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img class="img-thumbnail" src="/images/pj_logo.png" alt="logo" width="100" height="100">
-                        </div>
-                        <div class="col-md-9">
-                            <h5 class="card-title">`+ data.data.name + `</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">`+ data.data.description +`</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <small class="text-muted">1</small><small class="text-muted"> year or plus</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `);
-        $('#'+data.data.Id).hide();
-        $('#'+data.data.Id).slideToggle();
-        });
-        return false;
-    });
-
-    function AjaxRequest(method, action, controller, data = null, handledata = null, viewobj = null) {
-        $('.fa-spinner').show();
-
-        var urlAction = '@Url.Action("action", "controller", new { id = "idvalue" })';
-        urlAction = urlAction.replace("action", action);
-        urlAction = urlAction.replace("controller", controller);
-        urlAction = urlAction.replace("idvalue", data);
-
-        $.ajax({
-            type: method,
-            url: urlAction,
-            contentType: "application/json; charset=utf-8",
-            data:data,
-            dataType: "json",
-            success: function (data){
-                OnSuccessCall(data , handledata , viewobj);
-            },
-            error: OnErrorCall
-        });
-    }
-
-    function OnSuccessCall(response , handledata , viewobj) {
-        /*response (status , data , displaySweetAlert , message)*/
-        if (handledata) {
-            handledata(response.data , viewobj)
-        }
-        if (response.displaySweetAlert){
-            swal("Good job!", response.message , "success")
-        }
-        if (response.status != "200") {
-            swal("Error Occured!", response.message , "error")
-        }
         $('.fa-spinner').hide();
-    }
+        AjaxRequest('GET' , 'GetProjectByStatus' , 'Project' , 0 , displayPendingProjects , $('.projects'));
+        AjaxRequest('GET' , 'GetProjectByStatus' , 'Project' , 3 , displayPendingProjects , $('.projects'));
+        $('.fa-spinner').show();
 
-    function OnErrorCall(response) {
-      /*response (status , data , displaySweetAlert , message)*/
-      if(response.displaySweetAlert){
-        swal("Error Occured!", response.message , "error")
-        }
-      $('.fa-spinner').hide();
-    }
+        $('#add_project').submit(function(){
+            $('.fa-spinner').show();
+            var urlAction = '@Url.Action("AddProject", "Project")';
 
-    function ViewProject(data , viewobj) {
-        if (data) {
-           $('.edit-project').hide();
-          var status = $(viewobj).attr('status');
-          var viewProjectCardHeader = $('.view-project-header');
-          var viewProjectCard = $('.view-project-card');
-          var viewProjectCardFooter = $('.view-project-footer');
-          viewProjectCardHeader.removeClass();
-          viewProjectCardHeader.addClass('card-header text-white view-project-header bg-' + status);
-          viewProjectCardFooter.removeClass();
-          viewProjectCardFooter.addClass('card-footer view-project-footer bg-' + status);
-          viewProjectCard.removeClass()
-          viewProjectCard.addClass('card mb-3 shadow view-project-card border-' + status);
-          $('.view-project-name').text(data.name);
-          $('.view-project-description').text(data.description);
-          $('.view-project-experience').text('exp');
-          $('.view-project-details').text('google.com');
-          $('.view-project-details').attr("href", 'https://www.google.com/');
-          $('.view-project-manager').html(`
-                      manager name
-                      <span class="badge badge-dark float-right">Assigned from test date</span>`);
-          viewProjectCard.hide();
-          viewProjectCard.fadeToggle();
-        }
-    }
-
-    function displayPendingProjects(data, viewobj)
-    {
-        viewobj.html('');//clear all data displayed if any
-        $.each(data, function (key , pj) {
-            viewobj.prepend(`
-              <div class="card shadow mb-3">
-                <div class="card-header">PJ #`+pj.Id+`</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img class="img-thumbnail" src="/images/pj_logo.png" alt="logo" width="100" height="100">
-                        </div>
-                        <div class="col-md-9">
-                            <h5 class="card-title">`+ pj.name + `</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">`+ pj.description +`.</h6>
+            $.post(urlAction, $('#add_project').serialize(), function (data) {
+            OnSuccessCall(data, null, null);
+            $('.projects').prepend(`
+                <div class="card shadow mb-3" id="`+data.data.Id+`">
+                    <div class="card-header">new project</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img class="img-thumbnail" src="/images/pj_logo.png" alt="logo" width="100" height="100">
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="card-title">`+ data.data.name + `</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">`+ data.data.description +`</h6>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <small class="text-muted">1</small><small class="text-muted"> year or plus</small>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="accordion" id="pjManagerAccordion">
-                                <button class="btn btn-link float-right" type="button" data-toggle="collapse" data-target="#collapse`+pj.Id+`" aria-expanded="true" aria-controls="collapse`+pj.Id+`">
-                                    Requests
-                                    <span class="badge badge-primary">2</span>
-                                </button>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">1</small><small class="text-muted"> year or plus</small>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="collapse`+pj.Id+`" class="collapse hidden" aria-labelledby="headingOne" data-parent="#pjManagerAccordion">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            Ahmed aly
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                        <li class="list-group-item">
-                            Mohamed fouad
-                            <button class="btn btn-success float-right">Assign</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            `);
+                `);
+            $('#'+data.data.Id).hide();
+            $('#'+data.data.Id).slideToggle();
+            });
+            return false;
         });
-    }
 
+        $('body').on("click", '.requests', function (event) {
+            var projectId = $(this).attr('pj-id');
+            AjaxRequest('GET', 'GetPjManagerRequests', 'Project', projectId , displayPjManagerRequests, $('.pjmanagerlist.' + projectId));
+        })
+
+        function AjaxRequest(method, action, controller, data = null, handledata = null, viewobj = null) {
+            $('.fa-spinner').show();
+
+            var urlAction = '@Url.Action("action", "controller", new { id = "idvalue"})';
+            urlAction = urlAction.replace("action", action);
+            urlAction = urlAction.replace("controller", controller);
+            urlAction = urlAction.replace("idvalue", data);
+
+            $.ajax({
+                type: method,
+                url: urlAction,
+                contentType: "application/json; charset=utf-8",
+                data:data,
+                dataType: "json",
+                success: function (data){
+                    OnSuccessCall(data , handledata , viewobj);
+                },
+                error: OnErrorCall
+            });
+        }
+
+        function OnSuccessCall(response , handledata , viewobj) {
+            /*response (status , data , displaySweetAlert , message)*/
+            if (handledata) {
+                handledata(response.data , viewobj)
+            }
+            if (response.displaySweetAlert){
+                swal("Good job!", response.message , "success")
+            }
+            if (response.status != "200") {
+                swal("Error Occured!", response.message , "error")
+            }
+            $('.fa-spinner').hide();
+        }
+
+        function OnErrorCall(response) {
+          /*response (status , data , displaySweetAlert , message)*/
+          if(response.displaySweetAlert){
+            swal("Error Occured!", response.message , "error")
+            }
+          $('.fa-spinner').hide();
+        }
+
+        function ViewProject(data , viewobj) {
+            if (data) {
+               $('.edit-project').hide();
+              var status = $(viewobj).attr('status');
+              var viewProjectCardHeader = $('.view-project-header');
+              var viewProjectCard = $('.view-project-card');
+              var viewProjectCardFooter = $('.view-project-footer');
+              viewProjectCardHeader.removeClass();
+              viewProjectCardHeader.addClass('card-header text-white view-project-header bg-' + status);
+              viewProjectCardFooter.removeClass();
+              viewProjectCardFooter.addClass('card-footer view-project-footer bg-' + status);
+              viewProjectCard.removeClass()
+              viewProjectCard.addClass('card mb-3 shadow view-project-card border-' + status);
+              $('.view-project-name').text(data.name);
+              $('.view-project-description').text(data.description);
+              $('.view-project-experience').text('exp');
+              $('.view-project-details').text('google.com');
+              $('.view-project-details').attr("href", 'https://www.google.com/');
+              $('.view-project-manager').html(`
+                          manager name
+                          <span class="badge badge-dark float-right">Assigned from test date</span>`);
+              viewProjectCard.hide();
+              viewProjectCard.fadeToggle();
+            }
+        }
+
+        function displayPendingProjects(data, viewobj)
+        {
+            $.each(data, function (key , pj) {
+                viewobj.prepend(`
+                  <div class="card shadow mb-3">
+                    <div class="card-header">PJ #`+pj.Id+`</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img class="img-thumbnail" src="/images/pj_logo.png" alt="logo" width="100" height="100">
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="card-title">`+ pj.name + `</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">`+ pj.description +`.</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">1</small><small class="text-muted"> year or plus</small>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="accordion" id="pjManagerAccordion">
+                                    <button class="btn btn-link float-right requests" pj-id="`+pj.Id+`" type="button" data-toggle="collapse" data-target="#collapse`+pj.Id+`" aria-expanded="true" aria-controls="collapse`+pj.Id+`">
+                                        Requests
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse`+pj.Id+`" class="collapse hidden" aria-labelledby="headingOne" data-parent="#pjManagerAccordion">
+                        <ul class="list-group list-group-flush pjmanagerlist `+pj.Id+`">
+                            <li class="list-group-item">
+                                Ahmed aly
+                                <button class="btn btn-success float-right">Assign</button>
+                            </li>
+                            <li class="list-group-item">
+                                Mohamed fouad
+                                <button class="btn btn-success float-right">Assign</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                `);
+            });
+        }
+
+        function displayPjManagerRequests(data, viewobj)
+        {
+            console.log(data);
+            $.each(data, function (key , request) {
+                viewobj.prepend(`
+                    <li class="list-group-item">
+                        `+ request.first_name + request.last_name + `
+                        <button class="btn btn-success float-right assign-user" project_id="`+ request.project_id + `" manager_id="` + request.project_manager_id +`">
+                        Assign
+                        </button>
+                    </li>
+                `);
+            });
+        }
     </script>
 }

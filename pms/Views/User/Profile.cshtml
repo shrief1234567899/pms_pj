@@ -89,6 +89,7 @@
         $('.fa-spinner').show();
         var urlAction = '@Url.Action("EditProfile", "User")';
 
+        console.log($('#edit_user_form').serialize());
         $.post(urlAction, $('#edit_user_form').serialize(), function (data) {
             OnSuccessCall(data, null, null);
         });
@@ -157,6 +158,8 @@
             $('#delivered_progress').css('width', response.dashboardData[1] + '%');
             $('#notdelivered_perc').text(Math.round(response.dashboardData[2]) + '%');
             $('#notdelivered_progress').css('width', response.dashboardData[2] + '%');
+            $('#inprogress_perc').text(Math.round(response.dashboardData[3]) + '%');
+            $('#inprogress_progress').css('width', response.dashboardData[3] + '%');
         }
     }
 
